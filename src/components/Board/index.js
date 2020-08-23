@@ -17,6 +17,7 @@ function Board() {
   function move(fromList, toList, from, to) {
     setLists(produce(lists, draft => {
       const dragged = draft[fromList].cards[from];
+      dragged.isDragging = true;
 
       draft[fromList].cards.splice(from, 1);
       draft[toList].cards.splice(to, 0, dragged);

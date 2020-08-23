@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 import BoardContext from '../Board/context';
@@ -8,16 +8,20 @@ import { Container, Label } from './styles';
 function Card({data, index, listIndex}) {
   const ref = useRef();
   const { move } = useContext(BoardContext);
+  const [dragging, setDragging] = useState(data.isDragging)
 
   const [{ isDragging }, dragRef] = useDrag({
     item: { type: 'CARD', index, listIndex },
     collect: monitor => ({
-      isDragging: monitor.isDragging(),
+      isDragging: monitor.isDragging() || dragging,
     })
   })
 
   const [, dropRef] = useDrop({
     accept: 'CARD',
+    drop: (item, monitor) => {
+      setDragging(false);
+    },
     hover(item, monitor) {
       const draggedListIndex = item.listIndex;
       const targetListIndex = listIndex;
